@@ -1,4 +1,4 @@
-# Automatizador de Inventário no NBS 
+# Automatizador de Inventário no NBS
 
 Este projeto é um bot automatizado para inserir dados no módulo de contagem do nbs, utilizando a biblioteca `pyautogui`. Ele lê dados de um arquivo Excel e preenche automaticamente os campos necessários na tela.
 
