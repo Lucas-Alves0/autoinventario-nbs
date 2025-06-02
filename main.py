@@ -1,13 +1,18 @@
-from pyautogui import *
+from google.auth.transport.requests import AuthorizedSession
+from google.oauth2.service_account import Credentials
 from pymsgbox import alert
+from pyautogui import *
 from time import sleep
-from pandas import *
 from tkinter import *
-import keyboard
-import os
+import pandas as pd
 import threading
-import openpyxl
+import keyboard
+import warnings
+import gspread
+import urllib3
+import os
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Função para parar o script via botão
 def parar_script():
@@ -48,18 +53,31 @@ def insere_contagem():
     moveTo(x=785, y=356)
     click(x=785, y=356)
 
+    # Abre Conecta ao Google Sheets
+    scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+    ]
 
-    picking = read_excel("Lista_de_Itens.xlsx", engine='openpyxl')
-    for item, saldo in zip(picking["ITEM"], picking["SALDO"]):
+    creds = Credentials.from_service_account_file(r"C:\Users\lucas.paula_kovi\VSCodeProjects\loyal-semiotics-333616-f01a852ad3d2.json", scopes=scope)
+    session = AuthorizedSession(creds)
+    session.verify = False
+    client = gspread.authorize(creds, session=session)
+
+    sheet = client.open_by_key("1HzZdqDwhg0YJcvOrQA9Zu9iH1MZGbGheJIvtR76Lupo").worksheet("Lista de Contagem")
+    data = sheet.get_all_records()
+    df = pd.DataFrame(data)
+
+    for item, saldo in zip(df["ITEM"], df["SALDO"]):
         # Insere PN  no campo
-        sleep(0.2)
+        sleep(0.1)
         moveTo(x=585, y=430)
         click(x=585, y=430)
         write(str(item))
         hotkey('Tab')
 
         # Seleciona Fornecedor
-        sleep(0.2)
+        sleep(0.1)
         moveTo(x=928, y=431)
         click(x=928, y=431)
         write('In House')   
@@ -67,12 +85,12 @@ def insere_contagem():
         hotkey('Tab')
 
         # Cola Saldo
-        sleep(0.2)
+        sleep(0.1)
         write(str(saldo))
         hotkey('Enter')
 
         # Clica em Incliur item e Salva
-        sleep(0.2)
+        sleep(0.1)
         moveTo(x=954, y=805)
         click(x=954, y=805)
         hotkey('Enter')
