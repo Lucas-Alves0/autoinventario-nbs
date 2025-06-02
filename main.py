@@ -37,6 +37,21 @@ borda.place(x=5, y=5, width=290, height=150)
 
 
 def insere_contagem():
+    # Abre Conecta ao Google Sheets
+    scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+    ]
+
+    creds = Credentials.from_service_account_file(r"C:\Users\lucas.paula_kovi\VSCodeProjects\loyal-semiotics-333616-f01a852ad3d2.json", scopes=scope)
+    session = AuthorizedSession(creds)
+    session.verify = False
+    client = gspread.authorize(creds, session=session)
+
+    sheet = client.open_by_key("1HzZdqDwhg0YJcvOrQA9Zu9iH1MZGbGheJIvtR76Lupo").worksheet("Lista de Contagem")
+    data = sheet.get_all_records()
+    df = pd.DataFrame(data)
+
     # Entrar na tela de criação do inventário
 
     Janela.destroy()
@@ -52,21 +67,6 @@ def insere_contagem():
     sleep(0.3)
     moveTo(x=785, y=356)
     click(x=785, y=356)
-
-    # Abre Conecta ao Google Sheets
-    scope = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
-    ]
-
-    creds = Credentials.from_service_account_file(r"C:\Users\lucas.paula_kovi\VSCodeProjects\loyal-semiotics-333616-f01a852ad3d2.json", scopes=scope)
-    session = AuthorizedSession(creds)
-    session.verify = False
-    client = gspread.authorize(creds, session=session)
-
-    sheet = client.open_by_key("1HzZdqDwhg0YJcvOrQA9Zu9iH1MZGbGheJIvtR76Lupo").worksheet("Lista de Contagem")
-    data = sheet.get_all_records()
-    df = pd.DataFrame(data)
 
     for item, saldo in zip(df["ITEM"], df["SALDO"]):
         # Insere PN  no campo
