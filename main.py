@@ -32,8 +32,8 @@ Janela = Tk()
 Janela.title("Automação Inventário In House")
 Janela.resizable(width=False, height=False)
 Janela.geometry("300x160")
-borda = LabelFrame(Janela, text="Opções", borderwidth=1, relief="solid")
-borda.place(x=5, y=5, width=290, height=150)
+edge = LabelFrame(Janela, text="Opções", borderwidth=1, relief="solid")
+edge.place(x=5, y=5, width=290, height=150)
 
 
 def insere_contagem():
@@ -43,12 +43,12 @@ def insere_contagem():
     "https://www.googleapis.com/auth/drive"
     ]
 
-    creds = Credentials.from_service_account_file(r"C:\Users\lucas.paula_kovi\VSCodeProjects\loyal-semiotics-333616-f01a852ad3d2.json", scopes=scope)
+    creds = Credentials.from_service_account_file(r"Creds_json_path", scopes=scope)
     session = AuthorizedSession(creds)
     session.verify = False
     client = gspread.authorize(creds, session=session)
 
-    sheet = client.open_by_key("1HzZdqDwhg0YJcvOrQA9Zu9iH1MZGbGheJIvtR76Lupo").worksheet("Lista de Contagem")
+    sheet = client.open_by_key("your_spreadsheet_id").worksheet("sheet_name")
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 
@@ -101,12 +101,13 @@ def SAIR():
     Janela.destroy()
     os._exit(0)
 
+alert('Lembre-se de atualizar o saldo dos relatórios antes de executar, caso não o tenha feito clique em "Sair" e atualize.')
 
-Edges = Label(Janela)
-Edges.grid(row=0, column=0, padx=100, pady=5)
-Button_1 = Button(Janela, text="Inserir Contagem", width=23, bd=3, command=insere_contagem)
-Button_1.grid(row=1, column=0, padx=50, pady=7)
-Button_2 = Button(Janela, text="Sair", width=23, bd=3, command=SAIR)
-Button_2.grid(row=2, column=0, padx=50, pady=7)
+Invisible_button = Label(Janela)
+Invisible_button.grid(row=0, column=0, padx=100, pady=5)
+Start_Button = Button(Janela, text="Inserir Contagem", width=23, bd=3, command=insere_contagem)
+Start_Button.grid(row=1, column=0, padx=50, pady=7)
+Exit_Button = Button(Janela, text="Sair", width=23, bd=3, command=SAIR)
+Exit_Button.grid(row=2, column=0, padx=50, pady=7)
 
 Janela.mainloop()
