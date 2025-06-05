@@ -43,12 +43,12 @@ def insere_contagem():
     "https://www.googleapis.com/auth/drive"
     ]
 
-    creds = Credentials.from_service_account_file(r"Creds_json_path", scopes=scope)
+    creds = Credentials.from_service_account_file(r"C:\Users\lucas.paula_kovi\VSCodeProjects\creds.json", scopes=scope)
     session = AuthorizedSession(creds)
     session.verify = False
     client = gspread.authorize(creds, session=session)
 
-    sheet = client.open_by_key("your_spreadsheet_id").worksheet("sheet_name")
+    sheet = client.open_by_key("1HzZdqDwhg0YJcvOrQA9Zu9iH1MZGbGheJIvtR76Lupo").worksheet("Lista de Contagem")
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 
@@ -73,20 +73,20 @@ def insere_contagem():
         sleep(0.1)
         moveTo(x=585, y=430)
         click(x=585, y=430)
-        write(str(item))
+        write(str(item), interval=0.00001)
         hotkey('Tab')
 
         # Seleciona Fornecedor
         sleep(0.1)
         moveTo(x=928, y=431)
         click(x=928, y=431)
-        write('In House')   
+        write('In House', interval=0.00001)   
         hotkey('Enter')
         hotkey('Tab')
 
         # Cola Saldo
         sleep(0.1)
-        write(str(saldo))
+        write(str(saldo), interval=0.00001)
         hotkey('Enter')
 
         # Clica em Incliur item e Salva
@@ -95,13 +95,14 @@ def insere_contagem():
         click(x=954, y=805)
         hotkey('Enter')
 
+    press('shift')
     alert("Processo Finalizado!")
 
 def SAIR():
     Janela.destroy()
     os._exit(0)
 
-alert('Lembre-se de atualizar o saldo dos relatórios antes de executar, caso não o tenha feito clique em "Sair" e atualize.')
+alert('Lembre-se de atualizar o saldo dos relatórios antes de executar, caso não o tenha feito clique em "Sair" e atualize-o.')
 
 Invisible_button = Label(Janela)
 Invisible_button.grid(row=0, column=0, padx=100, pady=5)
